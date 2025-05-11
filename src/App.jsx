@@ -92,6 +92,7 @@ export default function HelocCalculator() {
       daysAccrued: "Days accrued:",
       interestAccrued: "Interest accrued:",
       estimatedInterest: "Estimated full month interest:",
+      subjectChange: "Subject to change",
       clear: "Clear",
       switchLang: "Français",
       todayExplanation: "If you want the custom date to be today, click Today",
@@ -111,6 +112,7 @@ export default function HelocCalculator() {
       daysAccrued: "Jours accumulés :",
       interestAccrued: "Intérêts courus :",
       estimatedInterest: "Intérêts mensuels estimés :",
+      subjectChange: "Susceptible de changer",
       clear: "Réinitialiser",
       switchLang: "English",
       todayExplanation: "Si vous voulez que la date personnalisée soit aujourd'hui, cliquez Aujourd'hui",
@@ -147,7 +149,7 @@ export default function HelocCalculator() {
           {t[language].description}
         </p>
 
-        <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm rounded p-3 mt-2 text-center">
+        <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 text-base rounded p-3 mt-2 text-center">
           <p className="font-semibold underline mb-1">
             {language === "fr" ? "Formule :" : "Formula:"}
           </p>
@@ -185,7 +187,12 @@ export default function HelocCalculator() {
               type="number"
               step="0.01"
               value={rate}
-              onChange={(e) => setRate(e.target.value)}
+              onChange={(e) => {
+                const val = parseFloat(e.target.value);
+                if (e.target.value === "" || val >= 0) {
+                  setRate(e.target.value);
+                }
+              }}
               placeholder="e.g. 5.45"
               className="w-full mt-1 p-2 border rounded"
             />
@@ -196,7 +203,20 @@ export default function HelocCalculator() {
             <input
               type="date"
               value={disbursementDate}
-              onChange={(e) => setDisbursementDate(e.target.value)}
+              onChange={(e) => {
+                const selectedDate = dayjs(e.target.value);
+                const today = dayjs().startOf("day");
+
+                if (selectedDate.isAfter(today)) {
+                  alert(language === "fr"
+                    ? "La date de début ne peut pas être ultérieure à aujourd'hui."
+                    : "Start date cannot be after today.");
+                  setDisbursementDate("");
+                } else {
+                  setDisbursementDate(e.target.value);
+                }
+              }}
+
               className="w-full mt-1 p-2 border rounded"
             />
           </label>
@@ -245,11 +265,12 @@ export default function HelocCalculator() {
         )}
 
         {calculatedResult && (
-          <div className="mt-6 bg-gray-50 p-4 rounded-lg space-y-2 text-sm">
+          <div className="mt-6 bg-gray-50 p-4 rounded-lg space-y-2 text-base">
             <p>🗓️ {t[language].interestCycle}</p>
             <p>📅 {t[language].daysAccrued} <strong>{calculatedResult.daysElapsed}</strong></p>
             <p>📈 {t[language].interestAccrued} <strong>${calculatedResult.accrued}</strong></p>
             <p>💰 {t[language].estimatedInterest} <strong>${calculatedResult.full}</strong></p>
+            <p>⛔ {t[language].subjectChange}</p>
           </div>
         )}
 
@@ -273,7 +294,7 @@ export default function HelocCalculator() {
       </div>
 
       <footer className="bg-gray-900 text-center text-sm text-gray-300 py-4 mt-10">
-          © {new Date().getFullYear()} Created by Alain Ekmekdjian
+        © {new Date().getFullYear()} Created by Alain Ekmekdjian
       </footer>
     </div>
   );
