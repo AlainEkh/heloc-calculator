@@ -34,8 +34,15 @@ export default function HelocCalculator() {
     const start = dayjs(disbursementDate);
     const nextCycleEnd = start.add(1, "month");
 
-    if (customDay.isAfter(nextCycleEnd)) {
-      alert(language === "fr" ? "La date personnalisée ne peut pas dépasser un mois civil complet à partir de la date de début." : "Custom date cannot be after one full calendar month from the start date.");
+    if (customDay.isBefore(start)) {
+      alert(language === "fr"
+        ? "La date personnalisée ne peut pas être antérieure à la date de début."
+        : "Custom date cannot be before the start date.");
+      setCustomDate("");
+    } else if (customDay.isAfter(nextCycleEnd)) {
+      alert(language === "fr"
+        ? "La date personnalisée ne peut pas dépasser un mois civil complet à partir de la date de début."
+        : "Custom date cannot be after one full calendar month from the start date.");
       setCustomDate("");
     } else {
       setCustomDate(inputDate);
