@@ -103,7 +103,8 @@ export default function HelocCalculator() {
       clear: "Clear",
       switchLang: "Français",
       todayExplanation: "If you want the custom date to be today, click Today",
-      todayAutoCalc: "Clicking 'Today' will set the custom date to today and automatically calculate the interest.",
+      todayAutoCalc: "Clicking 'Today' will set the custom date to today and automatically calculate the accrued interest.",
+      helocCycle: "The HELOC cycle is set to a monthly basis, so it's only possible to select a custom date within the same monthly cycle as the start date."
     },
     fr: {
       title: "Calculateur d'intérêt pour marge de crédit hypothécaire (HELOC)",
@@ -123,7 +124,8 @@ export default function HelocCalculator() {
       clear: "Réinitialiser",
       switchLang: "English",
       todayExplanation: "Si vous voulez que la date personnalisée soit aujourd'hui, cliquez Aujourd'hui",
-      todayAutoCalc: "En cliquant sur 'Aujourd'hui', la date personnalisée sera définie sur aujourd'hui et le calcul des intérêts sera effectué automatiquement.",
+      todayAutoCalc: "En cliquant sur 'Aujourd'hui', la date personnalisée sera définie sur aujourd'hui et le calcul des intérêts courus sera effectué automatiquement.",
+      helocCycle: "Le cycle HELOC est mensuel, donc la date personnalisée doit être dans le même mois que la date de début."
     },
   };
 
@@ -136,8 +138,8 @@ export default function HelocCalculator() {
         <div className="flex justify-between items-center">
           <a href="https://www.nesto.ca/" target="_blank" rel="noopener noreferrer">
             <img
-              src="https://www.nesto.ca/wp-content/themes/nesto/templates/objects/logo-nesto-en.svg"
-              alt="Nesto Logo"
+              src="/assets/nestomortgagelogo.png"
+              alt="Nesto Mortgage Logo"
               className="h-8 cursor-pointer"
             />
           </a>
@@ -152,7 +154,7 @@ export default function HelocCalculator() {
 
         <h1 className="text-lg font-bold text-center">{t[language].title}</h1>
 
-        <p className="text-base text-gray-600 text-center">
+        <p className="text-base text-gray-800 text-center">
           {t[language].description}
         </p>
 
@@ -205,6 +207,10 @@ export default function HelocCalculator() {
             />
           </label>
 
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-3 text-sm text-blue-900 rounded mt-1 mb-3">
+            {t[language].helocCycle}
+          </div>
+
           <label className="block">
             {t[language].disbursement}
             <input
@@ -238,14 +244,14 @@ export default function HelocCalculator() {
             />
           </label>
 
-          <div className="text-center text-base text-gray-600 mt-2">
+          <div className="text-center text-sm text-gray-900 mt-2">
             {t[language].todayAutoCalc}
           </div>
 
           <div className="flex space-x-4">
             <button
               onClick={handleTodayClick}
-              className="flex-1 bg-green-300 hover:bg-green-400 text-black py-2 rounded disabled:opacity-50 cursor-pointer"
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded disabled:opacity-50 cursor-pointer"
               disabled={isButtonDisabled}
             >
               {t[language].today}
@@ -257,7 +263,7 @@ export default function HelocCalculator() {
                   handleCalculateClick();
                 }, 0);
               }}
-              className="flex-1 bg-blue-300 hover:bg-blue-400 text-black py-2 rounded disabled:opacity-50 cursor-pointer"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded disabled:opacity-50 cursor-pointer"
               disabled={isButtonDisabled || (customDate === "" && disbursementDate === "")}
             >
               {t[language].calculate}
